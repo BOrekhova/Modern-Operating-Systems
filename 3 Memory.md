@@ -1,0 +1,3 @@
+- every program just sees the physical memory
+- MOV REG1,1000 (where 1000 is the memory location or cell containing some numbers of bits, usually eight)
+- only one 

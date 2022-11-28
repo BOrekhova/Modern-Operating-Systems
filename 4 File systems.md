@@ -1,4 +1,4 @@
-## 4. File systems
+## 4. File  systems
 ### 4.0 Intro
 
 - when a machine is turned off, data needs to be stored somewhere. disks are used for that purpose. also, disks offer much more space than RAM.

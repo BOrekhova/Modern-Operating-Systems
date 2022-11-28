@@ -1,0 +1,4 @@
+- I/O takes a significant amount of OS' code
+- I/O devices: keyboard, display, disk, clock
+- I/O devices can be divided into block devices (that store data in fixed-size blocks, each one with its one address) and character devices (delivers or accepts a stream of bytes, the device is not addressable and does not have seek function). Block devices: USB, HDD, SDD, character devices: mouse, printer, network interface
+- this scheme is incomplete. clocks are nor block devices, neither character devices (they just cause interrupts at defined intervals)
