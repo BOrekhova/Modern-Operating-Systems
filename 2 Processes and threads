@@ -1,0 +1,11 @@
+## 2.1 Processes
+- true parallelism: two and more cores share a physical memory and work in parallel
+- pseudo parallelism: one core works so fast that creates the illusion of running multiple programs (i.e. multiprogramming)
+- each provess has its own virtual CPU but in practice there is only one physical CPU
+- 4 principal events cause processes to born: system initialization, execution of a syscall that creates processes by a running process, user request to create a process
+- fork creates the same process with the same process image, execve changes its memory image. but child and parent have its own distinct address spaces!
+- 4 conditions for a process to die: normal exit, error exit (voluntary), fatal error (program executes an illegal instruction: referencing non-existing memory, dividing by zero), killed by another process (involuntary)
+- a process and all its children form a process group. processes in UNIX cannot disinherit their children
+- a process blocks for input, i.e. the process is blocked  
+
+![alt text](img/2-4.png "Title")
