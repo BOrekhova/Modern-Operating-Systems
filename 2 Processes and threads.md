@@ -66,6 +66,22 @@
 - signals are very hard to manage in single-threaded code
 
 ## 2.3 IPC
+- 3 issues arise (last two issues also apply to threads,and solutions to them)
+1. how can one process pass information to another?
+2. two or more processes do not get in each other's way
+3. proper sequencing of dependent processes (if A waits for B, then firstly comes B, then A)  
+
+### 2.3.1 Race Conditions
+- two or more processes are reading or writing some shared data and the final result is depending on who runs precisely when is called **race condition**
+
+### 2.3.2 Critical regions
+- the key to preventing trouble is to find a way to prohibit more than one process from reading and writing to **shared data** on the same time, i.e. we need **mutual exclusion**.
+
+
+
+
+
+
 - Mutual exclusion with busy waiting: disabling interrupts (not efficient), 
 
 - busy waiting is continuously testing a variable until some value appears
