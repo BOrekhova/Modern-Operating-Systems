@@ -9,7 +9,8 @@
 - a process blocks for input, i.e. the process is blocked  
 
 ![alt text](img/2-4.png "Title")
- 
+
+ ---
 ## 2.2 Threads 
 - each process has a signle thread of control and an address space
 
@@ -65,6 +66,8 @@
 - huge problem is that many library procedures are **not reentrant**, we cannot switch threads one with another
 - signals are very hard to manage in single-threaded code
 
+---
+
 ## 2.3 IPC
 - 3 issues arise (last two issues also apply to threads,and solutions to them)
 1. how can one process pass information to another?
@@ -77,11 +80,69 @@
 ### 2.3.2 Critical regions
 - the key to preventing trouble is to find a way to prohibit more than one process from reading and writing to **shared data** on the same time, i.e. we need **mutual exclusion**.
 
+- the part of the program where a shared memory is accessed is called a **critical region/section**
+
+- we need four conditions for a good solution to races:
+1. no two processes can be in their critical regions at the same time
+2. we make no assumption about number of cpus/cores/its speeds
+3. no process running outside its critical region can block any process
+4. no process has to wait forever to enter its critical region
+- in other words, we want this situation:
+![alt text](img/2-22.png "Title")
+
+### 2.3.3 Mutual exclusion with busy waiting
+### 2.3.3.1 Disabling interrupts
+- on a single processor system, the simplest solution is to have each process disable interrupts (including clock) just after entering its critical region; this is dangerous because then even CPU cannot reschedule the process (because usually it blocks the process in a timely manner)
+- it is inefficient on multicore systems because disabling interrupts affects only the given core
+- overall, disabling interrupts can be used by kernel for some instructions, but it is not good for user processes (now it is not used because all CPUs are multicore)
+
+### 2.3.3.2 Lock variables
+do not work
+
+### 2.3.3.3 Strict alternation
+![alt text](img/2-23.png "Title")
+- turn is initially equal to 0. the process 0 goes into its critical region, then changes the variable turn to 1, and exits the critical region. now process 2 stops **busy waiting** and goes into its critical region and then exits, sitting for a long time in non-critical region. process 0 again comes into its critical region and quickly exits. now turn is 1. process 0 wants to again enter its critical region but it **can't** because process 1 is still in its critical region.
+- we cannot use this method because it violates 3) condition written above (no process running outside its critical region can block any process)
+
+### 2.3.3.4 Peterson's solution
+- pretty decent algorithm!
+![alt text](img/2-24.png "Title")
+
+### 2.3.3.5 The TSL Instruction
+we require the TSL instruction (that blocks the bus)
+![alt text](img/2-26.png "Title")
+
+### 2.3.4 Sleep and Wakeup
+- previous solutions, that used busy waiting, are not good because CPU waits it tight loop and wastes its time
+- priority inversion problem: L (process with low priority) cannot exit its critical region and sits there forever because CPU executes H
+< finish the chapter ! :)>
+
+### 2.3.5 Semaphores
 
 
+### 2.3.6 Mutexes
+- are simplified version of semaphores
+- when a thread/process needs an access to a critical region, it calls *mutex_lock*. if it is currently unlocked (equals to 0), the process enters its critical region. other processes that try calling *mutex_lock* will be blocked until lock is equal to 0.
+
+- futex (fast user space mutex) combines a kernel service (for putting processes in waiting queue) and a user library
+
+- mutexes are implemented in PThreads: pthread_mutex_init/destory/lock/unlock. in addition to mutexes, pthreads offer a second sync mechanism: condition variables. these variables allow a thread to block if some condition is met
+
+### 2.3.7 Monitors
+- semaphores and mutexes can lead to deadlocks, so monitors were invented
+- monitors are a language concept, C does not have them
+- monitor is a collection of procedures, variables and data structures that are all grouped together
+- only one process can be active in a monitor at a given instant
+- it is up to a compiler to implement mutual exclusion on monitor entries (mutex or a binary semaphore is used)
+- monitors are not implemented in most of languages, therefore they are not applicable
+
+### 2.3.8 Message passing
 
 
+## 2.4 Scheduling
+- process switch (context switch) is expensive
 
-- Mutual exclusion with busy waiting: disabling interrupts (not efficient), 
-
-- busy waiting is continuously testing a variable until some value appears
+### 2.4.3 Scheduling in interactive OS
+- Round Robin algorithm. There is a time interval, called quantum...
+- Priority scheduling
+![alt text](img/2-43.png "Title")
